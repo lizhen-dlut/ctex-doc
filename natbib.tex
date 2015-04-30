@@ -1,3 +1,7 @@
+% \iffalse meta-comment
+%!TEX program = xelatex
+%!TEX builder = latexmk
+% \fi
 %\ProvidesFile{natbib}
 % [2010/09/13 8.31b (PWD, AO)]
 % \changes{4.0}{1993 Aug 19}{First documented release}
@@ -205,6 +209,9 @@
 \DisableCrossrefs %May stay; zapped by \EnableCrossrefs
 \CodelineNumbered %May stay
 
+\usepackage{ctex}
+\providecommand{\pkg}{\textsf}
+\providecommand{\opt}{\texttt}
 \begin{document}
    \DocInput{natbib.tex}
 \end{document}
@@ -271,65 +278,63 @@
 
 \GetFileInfo{natbib}
 
-\title{{\bfseries Natural Sciences Citations and References}\\
-        (Author--Year and Numerical Schemes)}
+\title{{\bfseries 自然科学引用与参考文献}\\
+        (作者--年份格式与数字格式)}
 
 \author{Patrick W. Daly\thanks{%
-  The code for merged numerical bibliography entries, emulating the \texttt{mcite} package,
-     has been commissioned by the American Physical Society and provided by Arthur Ogawa}}
+  模仿 \pkg{mcite} 宏包实现之数字参考文献合并之代码，由 Arthur Ogawa 提供，
+  并已获得 美国物理协会 之授权。}\and Liam Huang\thanks{%
+    \url{http://liamhuang.me/about}%
+  }}
 
-\date{This paper describes package \texttt{\filename}\\
-      version \fileversion{} from \filedate.}
+\date{本文乃 \pkg{\filename} 宏包之手册\\
+      对应版本：\fileversion{}（\filedate）}
 
 \maketitle
 
 \pagestyle{myheadings}
-\markboth{P. W. Daly}{NATURAL SCIENCES CITATIONS AND REFERENCES}
+\markboth{P. W. Daly\quad Liam Huang}{自然科学引用与参考文献}
 
 \newcommand{\btx}{\textsc{Bib}\TeX}
-\newcommand{\thestyle}{\texttt{\filename}}
+\newcommand{\thestyle}{\textsf{\filename}}
 
 
 ^^A In order to keep all marginal notes on the one (left) side:
 ^^A (otherwise they switch sides disasterously with twoside option)
 \makeatletter \@mparswitchfalse \makeatother
 
+\renewcommand{\abstractname}{简介}
 \begin{abstract}
 
-The \thestyle\ package is a reimplementation of the \LaTeX\ |\cite| command,
-to work with both author--year and numerical citations. It is compatible with
-the standard bibliographic style files, such as \texttt{plain.bst}, as well as
-with those for \texttt{harvard}, \texttt{apalike}, \texttt{chicago},
-\texttt{astron}, \texttt{authordate}, and of course \thestyle.
+\thestyle\ 宏包重新实现了 \LaTeX\ 标准的 \cs{cite} 命令。
+新定义的命令同时支持「作者--年份格式」和「数字格式」两种引用方式。
+\thestyle{} 与标准的 \pkg{bst} 文件兼容（如 \texttt{plain.bst}），
+同时也能兼容 \texttt{harvard}、\texttt{apalike}、\texttt{chicago}、
+\texttt{astron} 和 \texttt{authordate} 等 \pkg{bst} 文件。
+当然，也能兼容 \thestyle{} 本身。
 
 
-In contrast to the packages listed above, the \thestyle{} package supports not
-only the various author--year bibliography styles, but also those for standard
-numerical citations. In fact, it can also produce numerical citations even
-with an author--year bibliographic style, something that permits easy
-switching between the two citation modes. To this end, replacements for the
-standard \LaTeX\ \texttt{.bst} files are also provided.
+与上述宏包不同，\thestyle{} 宏包同时支持作者--年份格式和标准的数字格式两种引用方式。
+实际上，\thestyle{} 还能在引入作者--年份样式的同时，输出标准的数字格式。
+这使得在两种格式之间切换变得相当简单。
+为此，\thestyle{} 还提供了一些 \pkg{.bst} 文件，用以替换 \LaTeX{} 标准的 \pkg{.bst}。
 
-It is possible to define the citation \emph{style} (type of brackets and
-punctuation between citations) and even to associate it with the name of
-the bibliographic style so that it is automatically activated. Citation
-styles can be defined for local \texttt{.bst} files by means of a
-configuration file \thestyle\texttt{.cfg}.
+你可以用 \thestyle{} 定义不同的引用\emph{格式}（例如：括号的样式、相邻引用之间的标点）。
+\thestyle{} 宏包还允许你将这些格式和 \pkg{.bst} 的名字关联起来，在使用特定 \pkg{.bst}
+的时候启用特定的格式。
+你也可以通过配置 \thestyle\pkg{.cfg} 文件，来为本地 \pkg{.bst} 配置引用格式。
 
-It is compatible with the packages: \texttt{babel}, \texttt{index}, \texttt{citeref},
-\texttt{showkeys}, \texttt{chapterbib}, \texttt{hyperref}, \texttt{koma} and
-with the classes \texttt{amsbook} and \texttt{amsart}.
-It can also emulate the sorting and compressing functions of the \texttt{cite} package
-as well as the multiple citation (and merging) functions of Thorsten Ohl's \texttt{mcite} package.
-(The \thestyle{} package, however, is not compatible with either \texttt{cite} or \texttt{mcite} themselves.)
+\thestyle{} 宏包与下列宏包兼容：\pkg{babel}、\pkg{index}、\pkg{citeref}、
+\pkg{showkeys}、\pkg{chapterbib}、\pkg{hyperref}、\pkg{koma} 以及
+\pkg{amsbook} 和 \pkg{amsart} 文档类。
+\thestyle{} 宏包可以实现 \pkg{cite} 宏包的排序和压缩功能，也能实现 Thorsten Ohl 的
+\pkg{mcite} 宏包的多重引用合并功能。但是 \thestyle{} 宏包和这两个宏包并不兼容。
 
-Note that the \texttt{citeref} package (for adding citation page numbers in the
-bibliography) must be loaded after \thestyle. (The \texttt{hyperref} package with
-the option \texttt{pagebackref} also provides this feature, but with hyperlinks.)
+注意，使用 \pkg{citeref} 宏包（以添加引用条目在参考文献中的页码）时，该宏包必须在加载
+\thestyle{} 宏包之后引入。\pkg{hyperref} 宏包的 \opt{pagebackref} 选项也提供了
+这一功能，并且带有超链接。
 
-The \thestyle\ package therefore acts as a single, flexible interface for
-most of the available bibliographic styles.
-
+综上，\thestyle{} 宏包提供了对大多数参考文献样式的单一可扩展接口。
 \end{abstract}
 
 \newpage\tableofcontents\newpage
